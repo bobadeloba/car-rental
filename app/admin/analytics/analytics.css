@@ -1,0 +1,20 @@
+:root {
+  --color-confirmed: rgb(45, 173, 161);
+  --color-pending: rgb(246, 133, 27);
+  --color-cancelled: rgb(229, 72, 77);
+  --chart-1: 173 45% 43%;
+  --chart-2: 27 93% 54%;
+  --chart-3: 354 68% 59%;
+}
+
+.recharts-bar-rectangle path {
+  fill: rgb(45, 173, 161) !important;
+}
+
+.recharts-line-dot circle {
+  fill: currentColor !important;
+}
+
+.recharts-bar path {
+  fill: rgb(45, 173, 161) !important;
+}
