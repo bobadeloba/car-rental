@@ -1,12 +1,11 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import sharp from "sharp"
 import { Buffer } from "buffer"
 
 export async function GET() {
   try {
     // Create a Supabase client
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createServerClient()
 
     // Fetch the logo URL from admin settings
     const { data: settings, error } = await supabase
