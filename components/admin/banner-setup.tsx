@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Check, AlertCircle } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 
 interface BannerSetupProps {
   onComplete?: () => void
@@ -22,7 +22,7 @@ export function BannerSetup({ onComplete }: BannerSetupProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [progress, setProgress] = useState<Record<string, "pending" | "success" | "error">>({})
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   // Define the banners to set up
   const banners: Banner[] = [

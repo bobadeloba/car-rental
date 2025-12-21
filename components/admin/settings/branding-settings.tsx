@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2, Upload } from "lucide-react"
 import Image from "next/image"
@@ -40,7 +40,7 @@ export function BrandingSettings({ settings, userId, onSave, isLoading = false }
   const [isUploading, setIsUploading] = useState(false)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   const defaultValues = {
     app_name: settings?.app_name || "Premium Car Rentals",

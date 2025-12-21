@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@/lib/supabase/server"
 import { createClient } from "@supabase/supabase-js"
-import { cookies } from "next/headers"
 
 // Create a Supabase client with the service role key
 const createServiceClient = () => {
@@ -18,7 +17,7 @@ const createServiceClient = () => {
 export async function POST(request: Request) {
   try {
     // Create a regular Supabase client for auth checks
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createServerClient()
 
     // Check if user is authenticated
     const {

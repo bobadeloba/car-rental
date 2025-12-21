@@ -1,10 +1,26 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
 export async function GET() {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
+    const cookieStore = await cookies()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+            } catch {}
+          },
+        },
+      },
+    )
 
     // Check if user is authenticated
     const {
@@ -41,26 +57,6 @@ export async function GET() {
       }
     } catch (profileError) {
       console.error("Error checking profile:", profileError)
-    }
-
-    // Fallback to the check-role API
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/admin/check-role`, {
-        headers: {
-          cookie: cookies().toString(),
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        return NextResponse.json({
-          success: true,
-          isAdmin: data.isAdmin,
-          role: data.role,
-        })
-      }
-    } catch (apiError) {
-      console.error("Error checking admin API:", apiError)
     }
 
     // Default fallback for development

@@ -1,11 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 
 // This endpoint initializes necessary storage buckets for the application
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createServerClient()
 
     // Check if user is authenticated
     const {
@@ -94,7 +93,7 @@ export async function POST(request: NextRequest) {
 // GET handler to check the status of storage buckets
 export async function GET() {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createServerClient()
 
     // Authenticate the user
     const {

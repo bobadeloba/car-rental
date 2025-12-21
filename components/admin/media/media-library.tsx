@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2, Search, Filter, ImageIcon, Upload, Grid, List } from "lucide-react"
 import {
@@ -44,7 +44,7 @@ export function MediaLibrary({ userId, onSelect, selectable = false }: MediaLibr
     category: "general",
   })
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
   const [isUploading, setIsUploading] = useState(false)
 
   // Fetch media on component mount

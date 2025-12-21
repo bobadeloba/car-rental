@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 
 // Helper function to extract filename from URL
@@ -14,10 +14,26 @@ function getFilenameFromUrl(url: string): string | null {
   }
 }
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+async function createSupabaseClient() {
+  const cookieStore = await cookies()
+  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+        } catch {}
+      },
+    },
+  })
+}
+
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const id = params.id
+    const supabase = await createSupabaseClient()
+    const { id } = await params
 
     const { data, error } = await supabase.from("media").select("*").eq("id", id).single()
 
@@ -31,10 +47,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const id = params.id
+    const supabase = await createSupabaseClient()
+    const { id } = await params
 
     // Get request body
     let body
@@ -67,10 +83,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const id = params.id
+    const supabase = await createSupabaseClient()
+    const { id } = await params
 
     // First get the media item to get the file path
     const { data: media, error: fetchError } = await supabase.from("media").select("file_path").eq("id", id).single()

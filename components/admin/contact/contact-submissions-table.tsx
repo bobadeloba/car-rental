@@ -9,7 +9,7 @@ import { Eye, MailOpen, MailX, Trash2 } from "lucide-react"
 import DataTable from "@/components/admin/shared/data-table"
 import { formatDate } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 type ContactSubmission = {
@@ -30,7 +30,7 @@ export function ContactSubmissionsTable({ initialSubmissions }: { initialSubmiss
   const pageSize = 10
   const { toast } = useToast()
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   // Filter submissions based on active tab
   const filteredSubmissions = submissions.filter((submission) => {

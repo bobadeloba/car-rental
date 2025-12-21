@@ -1,11 +1,26 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+
+async function createSupabaseClient() {
+  const cookieStore = await cookies()
+  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+        } catch {}
+      },
+    },
+  })
+}
 
 export async function GET() {
   try {
-    // Create a Supabase client
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createSupabaseClient()
 
     // Check if user is authenticated
     const {
@@ -31,8 +46,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // Create a Supabase client
-    const supabase = createRouteHandlerClient({ cookies })
+    const supabase = await createSupabaseClient()
 
     // Check if user is authenticated
     const {

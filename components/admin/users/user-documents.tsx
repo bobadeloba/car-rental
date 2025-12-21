@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { FileIcon, CheckCircle, XCircle, Clock, Download, Check, X } from "lucide-react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import {
   Dialog,
   DialogContent,
@@ -27,7 +27,7 @@ export default function UserDocuments({ userId }: UserDocumentsProps) {
   const [reviewingDoc, setReviewingDoc] = useState<any>(null)
   const [rejectionReason, setRejectionReason] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   const fetchDocuments = async () => {
     setLoading(true)

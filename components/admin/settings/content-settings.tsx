@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2, Save } from "lucide-react"
 import Editor from "@/components/admin/editor"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 
 interface ContentSettingsProps {
   userId?: string
@@ -27,7 +27,7 @@ interface ContentItem {
 
 export function ContentSettings({ userId }: ContentSettingsProps) {
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
   const [activeTab, setActiveTab] = useState<ContentType>("about")
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(true)

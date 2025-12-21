@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 
@@ -41,7 +41,7 @@ interface ContactSettingsProps {
 export function ContactSettings({ settings, userId, onSave, isLoading = false }: ContactSettingsProps) {
   const [isSaving, setIsSaving] = useState(false)
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   const defaultValues = {
     site_address_line1: settings?.site_address_line1 || "",

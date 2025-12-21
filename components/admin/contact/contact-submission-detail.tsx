@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/lib/utils"
 import { ArrowLeft, MailOpen, MailX, Trash2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 type ContactSubmission = {
@@ -25,7 +25,7 @@ export function ContactSubmissionDetail({ submission }: { submission: ContactSub
   const [status, setStatus] = useState(submission.status)
   const { toast } = useToast()
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   const updateStatus = async (newStatus: "new" | "read" | "archived") => {
     try {
