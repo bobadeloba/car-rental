@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/components/ui/use-toast"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import { CarSpinner } from "@/components/ui/car-spinner"
 
 export default function ContactForm() {

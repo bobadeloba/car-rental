@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -14,8 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (code) {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = await createServerClient()
 
     try {
       // Exchange the code for a session
@@ -59,7 +57,6 @@ export async function GET(request: NextRequest) {
 
           if (insertError) {
             console.error("Error creating user profile:", insertError)
-            // Don't fail the login just because profile creation failed
           } else {
             console.log("Created new user profile for OAuth user")
           }

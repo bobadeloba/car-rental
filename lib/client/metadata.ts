@@ -1,4 +1,4 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import type { Metadata } from "next"
 
 export async function fetchAppMetadata() {

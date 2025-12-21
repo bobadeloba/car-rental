@@ -1,5 +1,4 @@
-import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@/lib/supabase/server"
 
 export type PageImage = {
   id: string
@@ -22,17 +21,14 @@ const DEFAULT_IMAGES: Record<string, string> = {
 
 export async function getServerPageImage(page: string): Promise<PageImage | null> {
   try {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+    const supabase = await createServerClient()
 
     const { data, error } = await supabase.from("page_images").select("*").eq("page", page).single()
 
     if (error) {
       if (error.code === "PGRST116") {
-        // Record not found
         console.log(`No image found for page ${page}, using default`)
 
-        // Return a default image if available
         if (DEFAULT_IMAGES[page]) {
           return {
             id: `default-${page}`,
@@ -53,7 +49,6 @@ export async function getServerPageImage(page: string): Promise<PageImage | null
   } catch (error) {
     console.error(`Error in getServerPageImage for ${page}:`, error)
 
-    // Return default image as last resort
     if (DEFAULT_IMAGES[page]) {
       return {
         id: `default-${page}`,
@@ -69,8 +64,7 @@ export async function getServerPageImage(page: string): Promise<PageImage | null
 
 export async function getAllServerPageImages(): Promise<PageImage[]> {
   try {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+    const supabase = await createServerClient()
 
     const { data, error } = await supabase.from("page_images").select("*")
 

@@ -1,5 +1,4 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import type { Metadata } from "next"
 import { AdminSettings } from "@/components/admin/settings/admin-settings"
@@ -12,9 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SettingsPage() {
-  // Get the Supabase client
-  const cookieStore = cookies()
-  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+  const supabase = await createServerClient()
 
   // Check if user is authenticated
   const {

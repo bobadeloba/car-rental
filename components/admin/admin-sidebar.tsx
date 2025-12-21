@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 
 const sidebarItems = [
   {
@@ -106,7 +106,7 @@ export function AdminSidebar() {
             ))}
           </nav>
           <div className="mt-6 pt-6 border-t">
-            <Button variant="outline" className="w-full justify-start" onClick={handleSignOut}>
+            <Button variant="outline" className="w-full justify-start bg-transparent" onClick={handleSignOut}>
               <LogOut className="mr-3 h-5 w-5" />
               Sign out
             </Button>

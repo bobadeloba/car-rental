@@ -1,5 +1,4 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import BookingEditForm from "@/components/admin/bookings/booking-edit-form"
 import { Button } from "@/components/ui/button"
@@ -13,7 +12,7 @@ interface PageProps {
 }
 
 export default async function EditBookingPage({ params }: PageProps) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = await createServerClient()
 
   // Fetch booking with related data
   const { data: booking, error } = await supabase

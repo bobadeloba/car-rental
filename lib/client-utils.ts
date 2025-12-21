@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import type { Database } from "@/types/supabase"
 
 /**

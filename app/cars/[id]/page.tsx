@@ -1,4 +1,4 @@
-import { getSupabaseServer } from "@/lib/supabase/server"
+import { createServerClient } from "@/lib/supabase/server"
 import { notFound, redirect } from "next/navigation"
 import CarGallery from "@/components/cars/car-gallery"
 import CarSpecifications from "@/components/cars/car-specifications"
@@ -7,13 +7,11 @@ import RelatedCars from "@/components/cars/related-cars"
 import WhatsappButton from "@/components/whatsapp-button"
 import type { Metadata } from "next"
 import { generatePageMetadata } from "@/lib/metadata"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
 import { isUUID } from "@/lib/slug-utils"
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   try {
-    const supabase = createServerComponentClient({ cookies })
+    const supabase = await createServerClient()
 
     // Try to find car by slug first, then by UUID
     let car
@@ -38,7 +36,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function CarDetailPage({ params }: { params: { id: string } }) {
-  const supabase = await getSupabaseServer()
+  const supabase = await createServerClient()
 
   try {
     let car

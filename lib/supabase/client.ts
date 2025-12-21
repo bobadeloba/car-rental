@@ -1,21 +1,30 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr"
 import type { Database } from "@/types/supabase"
 
-let supabaseClient: ReturnType<typeof createClientComponentClient<Database>> | null = null
+let supabaseClient: ReturnType<typeof createSupabaseBrowserClient<Database>> | null = null
 
 export function getSupabaseClient() {
   if (typeof window === "undefined") {
     // Server-side: create a new client each time
-    return createClientComponentClient<Database>()
+    return createSupabaseBrowserClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
   }
 
-  // Client-side: reuse the same client
+  // Client-side: reuse the same client (singleton pattern)
   if (!supabaseClient) {
-    supabaseClient = createClientComponentClient<Database>()
+    supabaseClient = createSupabaseBrowserClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
   }
 
   return supabaseClient
 }
+
+export const createBrowserClient = getSupabaseClient
+export const createClientComponentClient = getSupabaseClient
 
 // Helper function to sign in with Google
 export async function signInWithGoogle(redirectTo?: string) {

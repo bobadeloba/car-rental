@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import { Chrome, Apple } from "lucide-react"
 
 interface SocialAuthButtonsProps {
@@ -85,7 +85,7 @@ export default function SocialAuthButtons({ redirectUrl, mode = "signin" }: Soci
           variant="outline"
           onClick={handleGoogleAuth}
           disabled={isGoogleLoading || isAppleLoading}
-          className="w-full"
+          className="w-full bg-transparent"
         >
           {isGoogleLoading ? (
             <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
@@ -101,7 +101,7 @@ export default function SocialAuthButtons({ redirectUrl, mode = "signin" }: Soci
           variant="outline"
           onClick={handleAppleAuth}
           disabled={isGoogleLoading || isAppleLoading}
-          className="w-full"
+          className="w-full bg-transparent"
         >
           {isAppleLoading ? (
             <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin" />

@@ -1,4 +1,4 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import { v4 as uuidv4 } from "uuid"
 
 // Function to get a Supabase client for media operations

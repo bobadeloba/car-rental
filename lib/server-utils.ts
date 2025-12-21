@@ -1,14 +1,11 @@
-import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import type { Database } from "@/types/supabase"
+import { createServerClient } from "@/lib/supabase/server"
 
 /**
  * Fetches app metadata from Supabase - SERVER COMPONENTS ONLY
  */
 export async function fetchServerAppMetadata() {
   try {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient<Database>({ cookies: () => cookieStore })
+    const supabase = await createServerClient()
 
     const { data, error } = await supabase
       .from("admin_settings")

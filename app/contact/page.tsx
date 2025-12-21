@@ -1,4 +1,4 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import ContactForm from "@/components/contact/contact-form"
 import Image from "next/image"
 import { generatePageMetadata } from "@/lib/metadata"

@@ -2,17 +2,9 @@
 
 import React from "react"
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 
-export type PageImage = {
-  id: string
-  page: string
-  title: string
-  image_url: string
-  alt_text?: string | null
-  created_at: string
-  updated_at?: string | null
-}
+import type { PageImage } from "@/types/page-image"
 
 // Default images for different page types
 const DEFAULT_IMAGES: Record<string, string> = {

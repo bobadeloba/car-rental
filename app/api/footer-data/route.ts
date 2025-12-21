@@ -1,20 +1,9 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
-    // Create a Supabase client with admin privileges
-    const supabase = createRouteHandlerClient({
-      cookies,
-      options: {
-        global: {
-          headers: {
-            "x-bypass-rls": "true",
-          },
-        },
-      },
-    })
+    const supabase = await createServerClient()
 
     // Fetch the most recent settings
     const { data, error } = await supabase

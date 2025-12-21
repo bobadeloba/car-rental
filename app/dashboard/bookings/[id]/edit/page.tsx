@@ -1,6 +1,5 @@
 import { notFound, redirect } from "next/navigation"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { BookingEditForm } from "@/components/dashboard/booking-edit-form"
 import {
   Breadcrumb,
@@ -27,7 +26,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 }
 
 export default async function EditBookingPage({ params }: { params: { id: string } }) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = await createServerClient()
 
   // Check if user is authenticated
   const {

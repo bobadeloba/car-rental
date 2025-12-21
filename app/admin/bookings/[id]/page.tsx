@@ -1,5 +1,4 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import { notFound, redirect } from "next/navigation"
 import BookingDetails from "@/components/admin/bookings/booking-details"
 import BookingTimeline from "@/components/admin/bookings/booking-timeline"
@@ -20,7 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function BookingDetailPage({ params }: PageProps) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = await createServerClient()
 
   // Redirect to the new booking page if the ID is "new"
   if (params.id === "new") {
@@ -108,7 +107,7 @@ export default async function BookingDetailPage({ params }: PageProps) {
       <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
         <h2 className="text-xl font-semibold text-red-700">Error loading booking details</h2>
         <p className="text-red-600 mt-2">There was a problem loading this booking. Please try again later.</p>
-        <Button variant="outline" size="sm" className="mt-4" asChild>
+        <Button variant="outline" size="sm" className="mt-4 bg-transparent" asChild>
           <Link href="/admin/bookings">
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back to Bookings

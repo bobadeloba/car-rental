@@ -1,9 +1,8 @@
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 import BookingCreateForm from "@/components/admin/bookings/booking-create-form"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import Link from "next/link"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { generatePageMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
@@ -11,8 +10,7 @@ export async function generateMetadata() {
 }
 
 export default async function NewBookingPage() {
-  const cookieStore = cookies()
-  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+  const supabase = await createServerClient()
 
   try {
     // Fetch all users for dropdown

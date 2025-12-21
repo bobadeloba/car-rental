@@ -1,10 +1,9 @@
-import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@/lib/supabase/server"
 import type { Metadata } from "next"
 
 export async function fetchAppMetadata() {
   try {
-    const supabase = createServerComponentClient({ cookies })
+    const supabase = await createServerClient()
     const { data, error } = await supabase
       .from("admin_settings")
       .select("app_name, site_name, site_description")

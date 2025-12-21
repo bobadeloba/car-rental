@@ -1,10 +1,8 @@
-import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@/lib/supabase/server"
 
 export async function getServerCompanyName(): Promise<string> {
   try {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+    const supabase = await createServerClient()
 
     const { data, error } = await supabase
       .from("admin_settings")

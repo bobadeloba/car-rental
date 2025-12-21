@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react"
 import { useEffect, useState } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient } from "@/lib/supabase/client"
 import { CarSpinner } from "@/components/ui/car-spinner"
 
 interface FooterData {
