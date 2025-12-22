@@ -44,9 +44,6 @@ importers:
       '@radix-ui/react-toast':
         specifier: 1.2.15
         version: 1.2.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@supabase/auth-helpers-nextjs':
-        specifier: 0.15.0
-        version: 0.15.0(@supabase/supabase-js@2.89.0)
       '@supabase/ssr':
         specifier: 0.8.0
         version: 0.8.0(@supabase/supabase-js@2.89.0)
@@ -890,12 +887,6 @@ packages:
 
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
-
-  '@supabase/auth-helpers-nextjs@0.15.0':
-    resolution: {integrity: sha512-VtXz3GGnxluoxks1g3SaCoYr2OZ7PgRukDl+pLWrDfD2dPDaG8hmkp5iBZsU+lmsDYALGNO2dgbymgpAfD8eCQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.76.1
 
   '@supabase/auth-js@2.89.0':
     resolution: {integrity: sha512-wiWZdz8WMad8LQdJMWYDZ2SJtZP5MwMqzQq3ehtW2ngiI3UTgbKiFrvMUUS3KADiVlk4LiGfODB2mrYx7w2f8w==}
@@ -1903,8 +1894,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@40.0.0':
     dependencies:
@@ -2311,8 +2300,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.3.0':
     dependencies:
@@ -2344,8 +2331,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-source-editing@47.3.0':
     dependencies:
@@ -2888,11 +2873,6 @@ snapshots:
   '@standard-schema/spec@1.0.0': {}
 
   '@standard-schema/utils@0.3.0': {}
-
-  '@supabase/auth-helpers-nextjs@0.15.0(@supabase/supabase-js@2.89.0)':
-    dependencies:
-      '@supabase/supabase-js': 2.89.0
-      cookie: 1.1.1
 
   '@supabase/auth-js@2.89.0':
     dependencies:

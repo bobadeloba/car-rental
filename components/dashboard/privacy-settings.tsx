@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
@@ -29,7 +29,7 @@ interface PrivacySettings {
 
 export default function PrivacySettings({ userId }: { userId: string }) {
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(true)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)

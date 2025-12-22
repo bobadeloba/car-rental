@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/components/ui/use-toast"
 import { Upload, FileCheck } from "lucide-react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 
 export interface DocumentUploadProps {
   userId: string
@@ -27,7 +27,7 @@ export function DocumentUpload({ userId, documentTypes = [], onUploadComplete }:
   const [file, setFile] = useState<File | null>(null)
   const [documentTypeId, setDocumentTypeId] = useState<string>("")
   const [isUploading, setIsUploading] = useState(false)
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -38,7 +38,7 @@ type FormData = z.infer<typeof formSchema>
 
 export default function PasswordSettings() {
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)

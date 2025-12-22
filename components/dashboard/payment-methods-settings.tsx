@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useToast } from "@/components/ui/use-toast"
@@ -66,7 +66,7 @@ type FormData = z.infer<typeof formSchema>
 
 export default function PaymentMethodsSettings({ userId }: { userId: string }) {
   const { toast } = useToast()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient()
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(true)
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
