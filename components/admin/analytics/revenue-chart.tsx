@@ -20,6 +20,8 @@ export default function RevenueChart({ data }: RevenueChartProps) {
   // Process data to group by month
   const monthlyData = data.reduce(
     (acc, item) => {
+      if (!item || !item.created_at || item.amount == null) return acc
+
       const date = new Date(item.created_at)
       const month = date.getMonth()
 
@@ -40,6 +42,12 @@ export default function RevenueChart({ data }: RevenueChartProps) {
   // Convert to array and sort by month
   const chartData = Object.values(monthlyData).sort((a, b) => a.month - b.month)
 
+  if (chartData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No revenue data available</div>
+    )
+  }
+
   return (
     <ChartContainer
       config={{
@@ -55,7 +63,7 @@ export default function RevenueChart({ data }: RevenueChartProps) {
           <XAxis dataKey="monthName" tickLine={false} axisLine={false} padding={{ left: 20, right: 20 }} />
           <YAxis tickFormatter={(value) => `$${value}`} tickLine={false} axisLine={false} tickCount={5} />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="revenue" name="Revenue" fill="rgb(45, 173, 161)" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="revenue" name="Revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>

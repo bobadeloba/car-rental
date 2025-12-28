@@ -43,16 +43,16 @@ export default function PopularCarsChart({ data }: PopularCarsChartProps) {
   // Process data to count bookings per car
   const carBookings = data.reduce(
     (acc, item) => {
-      if (!item.cars) return acc
+      if (!item || !item.cars || !item.car_id) return acc
 
       const carId = item.car_id
-      const carName = `${item.cars.brand} ${item.cars.name}`
+      const carName = `${item.cars.brand || "Unknown"} ${item.cars.name || "Car"}`
 
       if (!acc[carId]) {
         acc[carId] = {
           id: carId,
           name: carName,
-          shortName: `${item.cars.brand.slice(0, 3)} ${item.cars.name.slice(0, 3)}`,
+          shortName: `${(item.cars.brand || "Unk").slice(0, 3)} ${(item.cars.name || "Car").slice(0, 3)}`,
           bookings: 0,
         }
       }
@@ -104,7 +104,7 @@ export default function PopularCarsChart({ data }: PopularCarsChartProps) {
             width={isMobile ? 60 : 120}
           />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="bookings" name="Bookings" fill="var(--color-bookings)" radius={[0, 4, 4, 0]} />
+          <Bar dataKey="bookings" name="Bookings" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>

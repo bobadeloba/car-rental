@@ -1,111 +1,103 @@
 import { NextResponse } from "next/server"
-import { getSupabaseServer } from "@/lib/supabase/server"
+import { createServerClient } from "@/lib/supabase/server"
 
 export async function GET() {
   try {
-    const supabase = await getSupabaseServer()
+    const supabase = await createServerClient()
 
-    // Get the current user with better error handling
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
 
-    // In production, we need to be more flexible with authentication
-    const isProduction = process.env.NODE_ENV === "production"
-    const isDevelopment = process.env.NODE_ENV === "development"
-    const isPreview = process.env.VERCEL_ENV === "preview"
-
-    // Allow access in development/preview or if user is authenticated
-    if (!user && isProduction) {
-      console.log("No authenticated user in production")
-      // Return sample data instead of failing
-      return NextResponse.json(getSampleData())
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Check admin role with fallbacks
-    const isAdmin =
-      !isProduction || // Allow in non-production
-      user?.user_metadata?.role === "admin" ||
-      user?.email?.includes("admin") ||
-      user?.email?.endsWith("@admin.com")
+    // Check if user is admin by querying the users table
+    const { data: userData, error: userError } = await supabase.from("users").select("role").eq("id", user.id).single()
 
-    if (!isAdmin && isProduction) {
-      console.log("User is not admin in production:", user?.email)
-      // Return sample data instead of failing
-      return NextResponse.json(getSampleData())
+    if (userError || userData?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 })
     }
 
-    // Try to fetch real data with comprehensive error handling
-    try {
-      // First, check if the views exist
-      const { data: viewCheck, error: viewError } = await supabase.from("page_view_stats").select("count").limit(1)
+    console.log("[v0] Fetching page analytics data from database...")
 
-      if (viewError) {
-        console.error("Views don't exist or can't be accessed:", viewError)
-        return NextResponse.json(getSampleData())
-      }
+    // Fetch page statistics from the view
+    const { data: pageStats, error: pageError } = await supabase
+      .from("page_view_stats")
+      .select("*")
+      .order("total_views", { ascending: false })
 
-      // Fetch page statistics
-      const { data: pageStats, error: pageError } = await supabase
-        .from("page_view_stats")
-        .select("*")
-        .order("total_views", { ascending: false })
-
-      // Fetch location statistics
-      const { data: locationStats, error: locationError } = await supabase
-        .from("page_view_locations")
-        .select("*")
-        .order("total_views", { ascending: false })
-        .limit(20)
-
-      // Fetch device statistics
-      const { data: deviceStats, error: deviceError } = await supabase
-        .from("page_view_devices")
-        .select("*")
-        .order("total_views", { ascending: false })
-        .limit(20)
-
-      // Fetch recent views with duration
-      const { data: recentViews, error: recentError } = await supabase
-        .from("page_views")
-        .select(`
-          id,
-          page_path,
-          page_title,
-          country,
-          city,
-          device_type,
-          browser,
-          duration_seconds,
-          is_bounce,
-          exit_type,
-          visited_at
-        `)
-        .order("visited_at", { ascending: false })
-        .limit(50)
-
-      // If we have any errors, fall back to sample data
-      if (pageError || locationError || deviceError || recentError) {
-        console.error("Database errors:", { pageError, locationError, deviceError, recentError })
-        return NextResponse.json(getSampleData())
-      }
-
-      // Return real data if available, otherwise sample data
-      return NextResponse.json({
-        pageStats: pageStats || [],
-        locationStats: locationStats || [],
-        deviceStats: deviceStats || [],
-        recentViews: recentViews || [],
-        engagementStats: [], // Will be populated when engagement view is working
-      })
-    } catch (dbError) {
-      console.error("Database connection error:", dbError)
-      return NextResponse.json(getSampleData())
+    if (pageError) {
+      console.error("[v0] Error fetching page stats:", pageError)
     }
+
+    // Fetch location statistics from the view
+    const { data: locationStats, error: locationError } = await supabase
+      .from("page_view_locations")
+      .select("*")
+      .order("total_views", { ascending: false })
+      .limit(50)
+
+    if (locationError) {
+      console.error("[v0] Error fetching location stats:", locationError)
+    }
+
+    // Fetch device statistics from the view
+    const { data: deviceStats, error: deviceError } = await supabase
+      .from("page_view_devices")
+      .select("*")
+      .order("total_views", { ascending: false })
+      .limit(50)
+
+    if (deviceError) {
+      console.error("[v0] Error fetching device stats:", deviceError)
+    }
+
+    // Fetch recent page views with duration
+    const { data: recentViews, error: recentError } = await supabase
+      .from("page_views")
+      .select(
+        `
+        id,
+        page_path,
+        page_title,
+        country,
+        city,
+        device_type,
+        browser,
+        duration_seconds,
+        is_bounce,
+        exit_type,
+        visited_at
+      `,
+      )
+      .order("visited_at", { ascending: false })
+      .limit(100)
+
+    if (recentError) {
+      console.error("[v0] Error fetching recent views:", recentError)
+    }
+
+    console.log("[v0] Page analytics data fetched successfully:", {
+      pageStats: pageStats?.length || 0,
+      locationStats: locationStats?.length || 0,
+      deviceStats: deviceStats?.length || 0,
+      recentViews: recentViews?.length || 0,
+    })
+
+    // Return real data, use empty arrays if no data available
+    return NextResponse.json({
+      pageStats: pageStats || [],
+      locationStats: locationStats || [],
+      deviceStats: deviceStats || [],
+      recentViews: recentViews || [],
+      engagementStats: [],
+    })
   } catch (error) {
-    console.error("Error in page-views API:", error)
-    return NextResponse.json(getSampleData())
+    console.error("[v0] Error in page-views API:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 

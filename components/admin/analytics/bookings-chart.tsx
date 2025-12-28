@@ -20,6 +20,8 @@ export default function BookingsChart({ data }: BookingsChartProps) {
   // Process data to group by month and status
   const monthlyData = data.reduce(
     (acc, item) => {
+      if (!item || !item.created_at || !item.status) return acc
+
       const date = new Date(item.created_at)
       const month = date.getMonth()
 
@@ -49,20 +51,26 @@ export default function BookingsChart({ data }: BookingsChartProps) {
   // Convert to array and sort by month
   const chartData = Object.values(monthlyData).sort((a, b) => a.month - b.month)
 
+  if (chartData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No booking data available</div>
+    )
+  }
+
   return (
     <ChartContainer
       config={{
         confirmed: {
           label: "Confirmed",
-          color: "rgb(45, 173, 161)",
+          color: "hsl(var(--chart-1))",
         },
         pending: {
           label: "Pending",
-          color: "rgb(246, 133, 27)",
+          color: "hsl(var(--chart-2))",
         },
         cancelled: {
           label: "Cancelled",
-          color: "rgb(229, 72, 77)",
+          color: "hsl(var(--chart-3))",
         },
       }}
     >
@@ -77,7 +85,7 @@ export default function BookingsChart({ data }: BookingsChartProps) {
             type="monotone"
             dataKey="confirmed"
             name="Confirmed"
-            stroke="rgb(45, 173, 161)"
+            stroke="hsl(var(--chart-1))"
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
@@ -86,7 +94,7 @@ export default function BookingsChart({ data }: BookingsChartProps) {
             type="monotone"
             dataKey="pending"
             name="Pending"
-            stroke="rgb(246, 133, 27)"
+            stroke="hsl(var(--chart-2))"
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
@@ -95,7 +103,7 @@ export default function BookingsChart({ data }: BookingsChartProps) {
             type="monotone"
             dataKey="cancelled"
             name="Cancelled"
-            stroke="rgb(229, 72, 77)"
+            stroke="hsl(var(--chart-3))"
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
