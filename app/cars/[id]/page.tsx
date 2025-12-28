@@ -10,17 +10,23 @@ import type { Metadata } from "next"
 import { generatePageMetadata } from "@/lib/metadata"
 import { isUUID } from "@/lib/slug-utils"
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+
   try {
     const supabase = await createServerClient()
 
     // Try to find car by slug first, then by UUID
     let car
-    if (isUUID(params.id)) {
-      const { data } = await supabase.from("cars").select("*").eq("id", params.id).single()
+    if (isUUID(id)) {
+      const { data } = await supabase.from("cars").select("*").eq("id", id).single()
       car = data
     } else {
-      const { data } = await supabase.from("cars").select("*").eq("slug", params.id).single()
+      const { data } = await supabase.from("cars").select("*").eq("slug", id).single()
       car = data
     }
 
@@ -36,7 +42,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function CarDetailPage({ params }: { params: { id: string } }) {
+export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createServerClient()
 
   try {
@@ -44,9 +51,9 @@ export default async function CarDetailPage({ params }: { params: { id: string }
     let shouldRedirect = false
 
     // Check if the ID is a UUID or slug
-    if (isUUID(params.id)) {
+    if (isUUID(id)) {
       // If it's a UUID, get the car and redirect to slug URL
-      const { data, error } = await supabase.from("cars").select("*").eq("id", params.id).single()
+      const { data, error } = await supabase.from("cars").select("*").eq("id", id).single()
 
       if (error || !data) {
         console.error("Error fetching car by UUID:", error)
@@ -57,7 +64,7 @@ export default async function CarDetailPage({ params }: { params: { id: string }
       shouldRedirect = true
     } else {
       // If it's a slug, get the car directly
-      const { data, error } = await supabase.from("cars").select("*").eq("slug", params.id).single()
+      const { data, error } = await supabase.from("cars").select("*").eq("slug", id).single()
 
       if (error || !data) {
         console.error("Error fetching car by slug:", error)
