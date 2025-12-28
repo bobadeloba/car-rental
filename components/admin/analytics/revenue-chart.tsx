@@ -7,10 +7,16 @@ interface RevenueChartProps {
   data: Array<{
     amount: number
     created_at: string
-  }>
+  }> | null
 }
 
 export default function RevenueChart({ data }: RevenueChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No revenue data available</div>
+    )
+  }
+
   // Process data to group by month
   const monthlyData = data.reduce(
     (acc, item) => {

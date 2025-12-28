@@ -12,6 +12,7 @@ interface Car {
   id: string
   name: string
   brand: string
+  slug?: string
   price_per_day: number
   images?: string[]
 }
@@ -49,7 +50,7 @@ export function FeaturedCars({ cars: initialCars = [] }: { cars?: Car[] }) {
 
         const { data, error } = await supabase
           .from("cars")
-          .select("id, name, brand, price_per_day, images")
+          .select("id, name, brand, slug, price_per_day, images")
           .order("price_per_day", { ascending: false })
           .limit(6)
 
@@ -88,6 +89,11 @@ export function FeaturedCars({ cars: initialCars = [] }: { cars?: Car[] }) {
     return fallbackImages[index % fallbackImages.length]
   }
 
+  // Helper function to get car URL using slug when available
+  const getCarUrl = (car: Car) => {
+    return car.slug ? `/cars/${car.slug}` : `/cars/${car.id}`
+  }
+
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,7 +130,6 @@ export function FeaturedCars({ cars: initialCars = [] }: { cars?: Car[] }) {
                     className="object-cover"
                     unoptimized
                     onError={(e) => {
-                      // Fallback to a placeholder if the image fails to load
                       const target = e.target as HTMLImageElement
                       target.src = `/placeholder.svg?height=192&width=384&query=luxury+${car.brand}+${car.name}`
                     }}
@@ -136,7 +141,7 @@ export function FeaturedCars({ cars: initialCars = [] }: { cars?: Car[] }) {
                   </h3>
                   <p className="text-primary font-bold mb-4">${car.price_per_day} / day</p>
                   <Button asChild className="w-full">
-                    <Link href={`/cars/${car.id}`}>View Details</Link>
+                    <Link href={getCarUrl(car)}>View Details</Link>
                   </Button>
                 </CardContent>
               </Card>

@@ -7,10 +7,16 @@ interface BookingsChartProps {
   data: Array<{
     created_at: string
     status: string
-  }>
+  }> | null
 }
 
 export default function BookingsChart({ data }: BookingsChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No booking data available</div>
+    )
+  }
+
   // Process data to group by month and status
   const monthlyData = data.reduce(
     (acc, item) => {

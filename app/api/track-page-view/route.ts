@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Page path is required" }, { status: 400 })
     }
 
+    const finalSessionId = sessionId || `server-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
+
     const supabase = await createServerClient()
 
     // Get user if authenticated
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
         browser: deviceInfo.browser,
         operating_system: deviceInfo.operating_system,
         referrer: referrer,
-        session_id: sessionId || null,
+        session_id: finalSessionId, // Use guaranteed non-null sessionId
         user_id: user?.id || null,
         visited_at: startTime ? new Date(startTime).toISOString() : new Date().toISOString(),
       })
@@ -60,12 +62,19 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("[v0] Error inserting page view:", error)
-      return NextResponse.json({ error: "Failed to track page view" }, { status: 500 })
+      return NextResponse.json(
+        {
+          error: "Failed to track page view",
+          details: error.message,
+        },
+        { status: 500 },
+      )
     }
 
     return NextResponse.json({
       success: true,
       pageViewId: data?.id,
+      sessionId: finalSessionId, // Return the sessionId so client can use it
     })
   } catch (error) {
     console.error("[v0] Error in track-page-view API:", error)

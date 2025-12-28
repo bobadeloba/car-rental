@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Duration is required" }, { status: 400 })
     }
 
+    const finalSessionId = sessionId || `server-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
+
     const supabase = await createServerClient()
 
     const isBounce = duration < 10
@@ -26,13 +28,19 @@ export async function POST(request: NextRequest) {
 
       if (error) {
         console.error("[v0] Error updating page view duration:", error)
-        return NextResponse.json({ error: "Failed to update duration" }, { status: 500 })
+        return NextResponse.json(
+          {
+            error: "Failed to update duration",
+            details: error.message,
+          },
+          { status: 500 },
+        )
       }
-    } else if (sessionId && pagePath) {
+    } else if (pagePath) {
       const { data: existingView } = await supabase
         .from("page_views")
         .select("id")
-        .eq("session_id", sessionId)
+        .eq("session_id", finalSessionId)
         .eq("page_path", pagePath)
         .order("visited_at", { ascending: false })
         .limit(1)
@@ -50,6 +58,13 @@ export async function POST(request: NextRequest) {
 
         if (error) {
           console.error("[v0] Error updating existing page view:", error)
+          return NextResponse.json(
+            {
+              error: "Failed to update existing view",
+              details: error.message,
+            },
+            { status: 500 },
+          )
         }
       }
     }

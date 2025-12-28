@@ -52,9 +52,15 @@ export function usePageTracker() {
 
       if (response.ok) {
         const result = await response.json()
+        if (result.sessionId) {
+          sessionStorage.setItem("tracking_session_id", result.sessionId)
+        }
         return result.pageViewId || null
+      } else {
+        const error = await response.json()
+        console.warn("[v0] Error tracking page view:", error)
+        return null
       }
-      return null
     } catch (error) {
       console.warn("[v0] Error tracking page view:", error)
       return null

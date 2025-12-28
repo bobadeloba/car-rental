@@ -95,6 +95,10 @@ function BookingCard({ booking }: { booking: any }) {
   const endDate = new Date(booking.end_date)
   const durationDays = differenceInDays(endDate, startDate)
 
+  const getCarUrl = (car: any) => {
+    return car?.slug ? `/cars/${car.slug}` : `/cars/${car?.id}`
+  }
+
   return (
     <Card>
       <CardContent className="p-6">
@@ -165,7 +169,7 @@ function BookingCard({ booking }: { booking: any }) {
               )}
               {(booking.status === "completed" || booking.status === "cancelled") && booking.cars?.id && (
                 <Button variant="outline" asChild>
-                  <Link href={`/cars/${booking.cars.id}`}>Book Again</Link>
+                  <Link href={getCarUrl(booking.cars)}>Book Again</Link>
                 </Button>
               )}
             </div>

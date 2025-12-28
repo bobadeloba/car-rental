@@ -48,10 +48,10 @@ export default async function AnalyticsPage() {
       </div>
 
       <AnalyticsSummary
-        totalBookings={bookings.length}
+        totalBookings={bookings?.length || 0}
         totalRevenue={totalRevenue}
-        totalUsers={users.length}
-        totalCars={cars.length}
+        totalUsers={users?.length || 0}
+        totalCars={cars?.length || 0}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -61,7 +61,7 @@ export default async function AnalyticsPage() {
             <CardDescription>Monthly revenue from bookings</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-            <RevenueChart data={payments} />
+            <RevenueChart data={payments || []} />
           </CardContent>
         </Card>
 
@@ -71,7 +71,7 @@ export default async function AnalyticsPage() {
             <CardDescription>Monthly booking trends</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-            <BookingsChart data={bookings} />
+            <BookingsChart data={bookings || []} />
           </CardContent>
         </Card>
       </div>
@@ -82,7 +82,7 @@ export default async function AnalyticsPage() {
           <CardDescription>Cars with the most bookings</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px] sm:h-[400px]">
-          <PopularCarsChart data={bookings} />
+          <PopularCarsChart data={bookings || []} />
         </CardContent>
       </Card>
     </div>

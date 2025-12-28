@@ -9,6 +9,7 @@ interface Car {
   id: string
   name: string
   brand: string
+  slug?: string
   price_per_day: number
   images: string[]
   specs: any
@@ -96,6 +97,10 @@ export default async function RelatedCars({ currentCarId, category, cars: propCa
     return null
   }
 
+  const getCarUrl = (car: Car) => {
+    return car.slug ? `/cars/${car.slug}` : `/cars/${car.id}`
+  }
+
   return (
     <section className="mt-16 relative">
       <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
@@ -126,7 +131,7 @@ export default async function RelatedCars({ currentCarId, category, cars: propCa
                 </div>
 
                 <Button asChild className="w-full mt-4">
-                  <Link href={`/cars/${car.id}`}>View Details</Link>
+                  <Link href={getCarUrl(car)}>View Details</Link>
                 </Button>
               </CardContent>
             </Card>

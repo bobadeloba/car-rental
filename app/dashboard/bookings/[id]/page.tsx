@@ -50,7 +50,8 @@ export default async function BookingDetailsPage({ params }: { params: { id: str
         brand,
         price_per_day,
         images,
-        specs
+        specs,
+        slug
       )
     `)
     .eq("id", params.id)
@@ -152,7 +153,7 @@ export default async function BookingDetailsPage({ params }: { params: { id: str
                     )}
                   </div>
                   <Button variant="outline" asChild>
-                    <Link href={`/cars/${booking.cars?.id}`}>View Car Details</Link>
+                    <Link href={`/cars/${booking.cars?.slug || booking.cars?.id}`}>View Car Details</Link>
                   </Button>
                 </div>
               </div>

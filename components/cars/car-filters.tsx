@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useTransition } from "react"
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { useMediaQuery } from "react-responsive"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -42,6 +42,8 @@ export default function CarFilters({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const [isPending, startTransition] = useTransition()
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1023px)" })
 
@@ -86,7 +88,9 @@ export default function CarFilters({
       maxPrice: priceRange[1].toString(),
       sortBy: localSortBy,
     })
-    router.push(`${pathname}?${queryString}`)
+    startTransition(() => {
+      router.push(`${pathname}?${queryString}`)
+    })
   }
 
   const resetFiltersInternal = () => {
@@ -94,7 +98,9 @@ export default function CarFilters({
     setLocalBrand("all")
     setPriceRange([lowestPrice, highestPrice])
     setLocalSortBy("name-asc")
-    router.push(pathname)
+    startTransition(() => {
+      router.push(pathname)
+    })
   }
 
   const handleApplyFilters = () => {
@@ -262,7 +268,9 @@ export default function CarFilters({
                     maxPrice: priceRange[1].toString(),
                     sortBy: value,
                   })
-                  router.push(`${pathname}?${queryString}`)
+                  startTransition(() => {
+                    router.push(`${pathname}?${queryString}`)
+                  })
                 }
               }}
             >
@@ -283,11 +291,16 @@ export default function CarFilters({
       </Accordion>
 
       <div className="mt-6 sm:mt-8 space-y-2 sm:space-y-3">
-        <Button onClick={handleApplyFilters} className="w-full text-sm sm:text-base py-2 sm:py-3">
-          Apply Filters
+        <Button onClick={handleApplyFilters} className="w-full text-sm sm:text-base py-2 sm:py-3" disabled={isPending}>
+          {isPending ? "Applying..." : "Apply Filters"}
         </Button>
-        <Button onClick={handleResetFilters} variant="outline" className="w-full text-sm sm:text-base py-2 sm:py-3">
-          Reset Filters
+        <Button
+          onClick={handleResetFilters}
+          variant="outline"
+          className="w-full text-sm sm:text-base py-2 sm:py-3 bg-transparent"
+          disabled={isPending}
+        >
+          {isPending ? "Resetting..." : "Reset Filters"}
         </Button>
       </div>
     </>

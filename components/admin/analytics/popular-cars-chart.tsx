@@ -12,7 +12,7 @@ interface PopularCarsChartProps {
       name: string
       brand: string
     } | null
-  }>
+  }> | null
 }
 
 export default function PopularCarsChart({ data }: PopularCarsChartProps) {
@@ -33,6 +33,12 @@ export default function PopularCarsChart({ data }: PopularCarsChartProps) {
     // Clean up
     return () => window.removeEventListener("resize", checkIfMobile)
   }, [])
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No booking data available</div>
+    )
+  }
 
   // Process data to count bookings per car
   const carBookings = data.reduce(
@@ -61,6 +67,12 @@ export default function PopularCarsChart({ data }: PopularCarsChartProps) {
   const chartData = Object.values(carBookings)
     .sort((a, b) => b.bookings - a.bookings)
     .slice(0, 10)
+
+  if (chartData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-muted-foreground">No car booking data available</div>
+    )
+  }
 
   return (
     <ChartContainer
