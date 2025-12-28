@@ -9,7 +9,7 @@ export async function submitTestimonialAction(data: {
   comment: string
 }) {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Get the current user's ID only
     const {

@@ -12,7 +12,7 @@ export async function generateMetadata() {
 }
 
 export default async function AnalyticsPage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Get total bookings
   const { data: bookings } = await supabase.from("bookings").select(`*, cars(*)`)

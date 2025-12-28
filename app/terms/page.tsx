@@ -7,7 +7,7 @@ export async function generateMetadata() {
 }
 
 export default async function TermsPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   // Fetch terms page content
   const { data: content, error } = await supabase

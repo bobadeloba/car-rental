@@ -4,7 +4,7 @@ import { getSupabaseServer } from "@/lib/supabase/server"
 
 async function isAdmin() {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
     const {
       data: { session },
     } = await supabase.auth.getSession()
@@ -32,7 +32,7 @@ async function isAdmin() {
 
 export async function getMyTestimonials() {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Get the current user
     const {
@@ -73,7 +73,7 @@ export async function getMyTestimonials() {
 
 export async function submitTestimonial(formData: FormData) {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Get the current user
     const {

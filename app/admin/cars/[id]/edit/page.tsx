@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: EditCarPageProps) {
 }
 
 export default async function EditCarPage({ params }: EditCarPageProps) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   // Check if user is authenticated
   const {

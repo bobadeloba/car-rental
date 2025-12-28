@@ -9,7 +9,7 @@ export async function generateMetadata() {
 }
 
 export default async function PrivacyPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   // Fetch privacy page content
   const { data: content, error } = await supabase

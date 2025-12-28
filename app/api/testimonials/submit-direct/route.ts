@@ -3,7 +3,7 @@ import { getSupabaseServer } from "@/lib/supabase/server"
 
 export async function POST(request: Request) {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Get the current user
     const {

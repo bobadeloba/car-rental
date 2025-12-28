@@ -23,7 +23,7 @@ export async function generateMetadata() {
 }
 
 export default async function BookingsPage({ searchParams }: PageProps) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   // Parse query parameters
   const page = Number.parseInt(searchParams.page || "1")

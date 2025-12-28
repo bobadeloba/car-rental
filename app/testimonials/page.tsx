@@ -14,7 +14,7 @@ export async function generateMetadata() {
 }
 
 async function getApprovedTestimonials() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   try {
     // First try to use the view

@@ -14,15 +14,16 @@ export async function generateMetadata() {
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
+  const params = await searchParams
 
   // Extract filter parameters
-  const search = searchParams.search as string | undefined
-  const role = searchParams.role as string | undefined
-  const sortBy = searchParams.sortBy as string | undefined
-  const page = searchParams.page ? Number.parseInt(searchParams.page as string) : 1
+  const search = params.search as string | undefined
+  const role = params.role as string | undefined
+  const sortBy = params.sortBy as string | undefined
+  const page = params.page ? Number.parseInt(params.page as string) : 1
   const pageSize = 10
 
   // Build query

@@ -13,7 +13,7 @@ export async function generateMetadata() {
 }
 
 export default async function BookingsPage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Get current user
   const {

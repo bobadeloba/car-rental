@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 }
 
 export default async function ContactSubmissionPage({ params }: { params: { id: string } }) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   try {
     // Fetch contact submission

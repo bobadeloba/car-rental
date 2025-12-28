@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 }
 
 export default async function BookingDetailsPage({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Get current user
   const {
@@ -235,7 +235,7 @@ export default async function BookingDetailsPage({ params }: { params: { id: str
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 If you need assistance with your booking, please contact our customer support team.
               </p>
-              <Button variant="outline" className="w-full" asChild>
+              <Button variant="outline" className="w-full bg-transparent" asChild>
                 <Link href="/contact">Contact Support</Link>
               </Button>
             </CardContent>

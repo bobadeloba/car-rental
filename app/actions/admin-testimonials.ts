@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 // Check if user is admin using the users table
 async function isAdmin() {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
     const {
       data: { session },
     } = await supabase.auth.getSession()
@@ -50,10 +50,10 @@ export async function getAllTestimonials() {
 
     if (!adminCheck) {
       console.warn("Unauthorized access attempt to testimonials admin")
-      return [] // Return empty array instead of throwing error
+      return []
     }
 
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Check if testimonials table exists
     const { error: tableCheckError } = await supabase.from("testimonials").select("id").limit(1).maybeSingle()
@@ -74,7 +74,7 @@ export async function getAllTestimonials() {
     return data || []
   } catch (error) {
     console.error("Error in getAllTestimonials:", error)
-    return [] // Return empty array on error
+    return []
   }
 }
 
@@ -89,7 +89,7 @@ export async function updateTestimonialStatus(id: string, status: "pending" | "a
       }
     }
 
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     const { error } = await supabase.from("testimonials").update({ status }).eq("id", id)
 
@@ -129,7 +129,7 @@ export async function deleteTestimonial(id: string) {
       }
     }
 
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     const { error } = await supabase.from("testimonials").delete().eq("id", id)
 

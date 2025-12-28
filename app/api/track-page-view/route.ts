@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Page path is required" }, { status: 400 })
     }
 
-    const supabase = createServerClient()
+    const supabase = await createServerClient()
 
     // Get user if authenticated
     const {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     // Get IP address
     const forwarded = request.headers.get("x-forwarded-for")
     const realIp = request.headers.get("x-real-ip")
-    const ipAddress = forwarded?.split(",")[0] || realIp || "127.0.0.1"
+    const ipAddress = forwarded?.split(",")[0]?.trim() || realIp || null
 
     // Get user agent
     const userAgent = request.headers.get("user-agent") || ""
@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
     // Detect device information
     const deviceInfo = detectDevice(userAgent)
 
-    // Detect location
-    const locationInfo = await detectLocation(ipAddress)
+    // Detect location (async)
+    const locationInfo = await detectLocation(ipAddress || "")
 
     // Get referrer
     const referrer = request.headers.get("referer") || ""
@@ -41,17 +41,17 @@ export async function POST(request: NextRequest) {
       .from("page_views")
       .insert({
         page_path: pagePath,
-        page_title: pageTitle,
+        page_title: pageTitle || pagePath,
         ip_address: ipAddress,
-        country: locationInfo.country,
-        city: locationInfo.city,
-        region: locationInfo.region,
+        country: locationInfo.country || null,
+        city: locationInfo.city || null,
+        region: locationInfo.region || null,
         user_agent: userAgent,
         device_type: deviceInfo.device_type,
         browser: deviceInfo.browser,
         operating_system: deviceInfo.operating_system,
         referrer: referrer,
-        session_id: sessionId,
+        session_id: sessionId || null,
         user_id: user?.id || null,
         visited_at: startTime ? new Date(startTime).toISOString() : new Date().toISOString(),
       })
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error("Error inserting page view:", error)
+      console.error("[v0] Error inserting page view:", error)
       return NextResponse.json({ error: "Failed to track page view" }, { status: 500 })
     }
 
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       pageViewId: data?.id,
     })
   } catch (error) {
-    console.error("Error in track-page-view API:", error)
+    console.error("[v0] Error in track-page-view API:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

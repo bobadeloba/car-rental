@@ -15,7 +15,7 @@ export async function generateMetadata() {
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Check if user is authenticated
   const {

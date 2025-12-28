@@ -12,7 +12,7 @@ export async function generateMetadata() {
 }
 
 export default async function AdminTestimonialsPage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Check if testimonials table exists
   const { error: testimonialError } = await supabase.from("testimonials").select("id").limit(1)

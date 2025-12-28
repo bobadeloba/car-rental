@@ -4,86 +4,136 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  /* Enhanced color palette with teal/emerald primary for better brand presence and user experience */
+  --background: oklch(0.99 0 0); /* Softer white for reduced eye strain */
+  --foreground: oklch(0.2 0 0); /* Deep charcoal for better readability */
+
+  --card: oklch(1 0 0); /* Pure white for cards to stand out */
+  --card-foreground: oklch(0.2 0 0);
+
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: 173 45% 43%;
-  --chart-2: 27 93% 54%;
-  --chart-3: 354 68% 59%;
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --color-revenue: rgb(45, 173, 161);
-  --color-confirmed: rgb(45, 173, 161);
-  --color-pending: rgb(246, 133, 27);
-  --color-cancelled: rgb(229, 72, 77);
+  --popover-foreground: oklch(0.2 0 0);
+
+  /* Primary: Modern teal/emerald - conveys trust, luxury, and innovation */
+  --primary: oklch(0.52 0.15 180); /* Rich teal-emerald */
+  --primary-foreground: oklch(0.99 0 0); /* Crisp white text on primary */
+
+  /* Secondary: Warm complement for interactive elements */
+  --secondary: oklch(0.95 0.02 180); /* Light teal tint */
+  --secondary-foreground: oklch(0.3 0.12 180); /* Dark teal for text */
+
+  /* Muted: Softer gray tones for better visual hierarchy */
+  --muted: oklch(0.96 0.005 240); /* Cool light gray with hint of blue */
+  --muted-foreground: oklch(0.55 0.01 240); /* Medium gray for secondary text */
+
+  /* Accent: Subtle highlight color */
+  --accent: oklch(0.96 0.02 180); /* Very light teal */
+  --accent-foreground: oklch(0.3 0.12 180); /* Dark teal */
+
+  /* Destructive: Warmer, more approachable red */
+  --destructive: oklch(0.55 0.22 25); /* Coral red */
+  --destructive-foreground: oklch(0.99 0 0);
+
+  /* Borders: Subtle with slight warmth */
+  --border: oklch(0.9 0.005 240); /* Light gray-blue */
+  --input: oklch(0.92 0.005 240); /* Slightly lighter for inputs */
+  --ring: oklch(0.52 0.15 180); /* Primary color for focus rings */
+
+  /* Chart colors: Harmonious palette */
+  --chart-1: oklch(0.52 0.15 180); /* Primary teal */
+  --chart-2: oklch(0.65 0.19 150); /* Mint green */
+  --chart-3: oklch(0.6 0.2 210); /* Sky blue */
+  --chart-4: oklch(0.7 0.15 120); /* Spring green */
+  --chart-5: oklch(0.45 0.18 240); /* Deep blue */
+
+  /* Enhanced radius for modern feel */
+  --radius: 0.75rem; /* Increased from 0.625rem for softer edges */
+
+  /* Sidebar: Premium feel */
+  --sidebar: oklch(0.98 0.005 180); /* Very light teal tint */
+  --sidebar-foreground: oklch(0.25 0 0);
+  --sidebar-primary: oklch(0.52 0.15 180); /* Primary teal */
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.95 0.02 180);
+  --sidebar-accent-foreground: oklch(0.3 0.12 180);
+  --sidebar-border: oklch(0.92 0.005 180);
+  --sidebar-ring: oklch(0.52 0.15 180);
+
+  /* Status colors: Refined palette */
+  --color-revenue: oklch(0.52 0.15 180); /* Primary teal */
+  --color-confirmed: oklch(0.6 0.18 140); /* Green */
+  --color-pending: oklch(0.7 0.18 70); /* Amber */
+  --color-cancelled: oklch(0.55 0.22 25); /* Coral red */
+
+  /* Success color for positive actions */
+  --success: oklch(0.6 0.18 140);
+  --success-foreground: oklch(0.99 0 0);
+
+  /* Warning color */
+  --warning: oklch(0.7 0.18 70);
+  --warning-foreground: oklch(0.2 0 0);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --chart-1: 173 45% 43%;
-  --chart-2: 27 93% 54%;
-  --chart-3: 354 68% 59%;
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
-  --color-revenue: rgb(45, 173, 161);
-  --color-confirmed: rgb(45, 173, 161);
-  --color-pending: rgb(246, 133, 27);
-  --color-cancelled: rgb(229, 72, 77);
+  /* Enhanced dark mode with richer colors and better contrast */
+  --background: oklch(0.15 0.01 240); /* Deep blue-black for reduced eye strain */
+  --foreground: oklch(0.95 0 0); /* Soft white for readability */
+
+  --card: oklch(0.18 0.015 240); /* Slightly lighter than background */
+  --card-foreground: oklch(0.95 0 0);
+
+  --popover: oklch(0.18 0.015 240);
+  --popover-foreground: oklch(0.95 0 0);
+
+  /* Primary: Brighter teal for dark mode visibility */
+  --primary: oklch(0.65 0.18 180); /* Bright teal-emerald */
+  --primary-foreground: oklch(0.15 0.01 240); /* Dark background */
+
+  --secondary: oklch(0.25 0.03 180); /* Dark teal */
+  --secondary-foreground: oklch(0.95 0 0);
+
+  --muted: oklch(0.25 0.015 240); /* Dark gray-blue */
+  --muted-foreground: oklch(0.65 0.005 240); /* Medium gray */
+
+  --accent: oklch(0.28 0.03 180); /* Dark teal accent */
+  --accent-foreground: oklch(0.95 0 0);
+
+  --destructive: oklch(0.6 0.24 25); /* Brighter coral for visibility */
+  --destructive-foreground: oklch(0.95 0 0);
+
+  --border: oklch(0.28 0.015 240);
+  --input: oklch(0.25 0.015 240);
+  --ring: oklch(0.65 0.18 180);
+
+  --chart-1: oklch(0.65 0.18 180);
+  --chart-2: oklch(0.7 0.2 150);
+  --chart-3: oklch(0.65 0.22 210);
+  --chart-4: oklch(0.75 0.18 120);
+  --chart-5: oklch(0.55 0.2 240);
+
+  --sidebar: oklch(0.18 0.015 240);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.65 0.18 180);
+  --sidebar-primary-foreground: oklch(0.15 0.01 240);
+  --sidebar-accent: oklch(0.25 0.03 180);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(0.28 0.015 240);
+  --sidebar-ring: oklch(0.65 0.18 180);
+
+  --color-revenue: oklch(0.65 0.18 180);
+  --color-confirmed: oklch(0.65 0.2 140);
+  --color-pending: oklch(0.75 0.2 70);
+  --color-cancelled: oklch(0.6 0.24 25);
+
+  --success: oklch(0.65 0.2 140);
+  --success-foreground: oklch(0.15 0.01 240);
+
+  --warning: oklch(0.75 0.2 70);
+  --warning-foreground: oklch(0.15 0.01 240);
 }
 
 @theme inline {
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  /* Updated theme tokens with enhanced values */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -108,10 +158,14 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+
+  /* Enhanced radius scale for modern feel */
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -120,20 +174,70 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Added success and warning tokens */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+    /* Enhanced typography for better readability */
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improved heading hierarchy */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold text-balance;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  /* Better paragraph spacing */
+  p {
+    @apply text-pretty leading-relaxed;
+  }
+
+  /* Enhanced link styles */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-/* Chart styles */
+/* Updated chart styles with new primary color */
 .recharts-bar-rectangle path {
-  fill: rgb(45, 173, 161) !important;
+  fill: oklch(0.52 0.15 180) !important;
 }
 
 .recharts-line-dot circle {
@@ -141,5 +245,50 @@
 }
 
 .recharts-bar path {
-  fill: rgb(45, 173, 161) !important;
+  fill: oklch(0.52 0.15 180) !important;
+}
+
+/* Enhanced button hover effects */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Improved card hover effects */
+.hover-lift:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(to right, var(--muted) 0%, var(--accent) 50%, var(--muted) 100%);
+  background-size: 1000px 100%;
+}
+
+/* Focus visible improvements for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection color */
+::selection {
+  background-color: oklch(0.52 0.15 180 / 0.3);
+  color: var(--foreground);
 }

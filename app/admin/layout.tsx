@@ -10,7 +10,7 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   // Check if user is authenticated
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   const {
     data: { session },

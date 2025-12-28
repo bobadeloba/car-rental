@@ -9,7 +9,7 @@ export async function submitPublicTestimonial(data: {
   comment: string
 }) {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Insert directly into testimonials table without any user table access
     // Use a null user_id for public testimonials

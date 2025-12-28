@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import ProfileForm from "@/components/dashboard/profile-form"
 
 export default async function ProfilePage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Check if user is authenticated
   const {

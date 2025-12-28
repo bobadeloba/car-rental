@@ -6,7 +6,7 @@ import { getSupabaseServer } from "@/lib/supabase/server"
 async function setupProfiles() {
   "use server"
 
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Read the SQL file content
   const sqlContent = `
@@ -106,7 +106,7 @@ async function setupProfiles() {
 }
 
 export default async function SetupProfilesPage() {
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Check if profiles table exists
   const { error } = await supabase.from("profiles").select("id").limit(1)

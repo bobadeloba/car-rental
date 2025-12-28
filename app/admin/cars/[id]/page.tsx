@@ -26,7 +26,7 @@ export default async function CarDetailPage({ params }: PageProps) {
     redirect("/admin/cars/new")
   }
 
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   // Check if user is authenticated
   const {

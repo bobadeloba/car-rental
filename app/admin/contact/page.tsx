@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { ContactSubmissionsTable } from "@/components/admin/contact/contact-submissions-table"
 import { AdminPageHeader } from "@/components/admin/admin-page-header"
 import { generatePageMetadata } from "@/lib/metadata"
@@ -9,8 +9,7 @@ export async function generateMetadata() {
 
 export default async function ContactSubmissionsPage() {
   try {
-    // Use the server client with admin privileges
-    const supabase = createServerClient({ admin: true })
+    const supabase = createAdminClient()
 
     // Fetch contact submissions directly with service role
     const { data: submissions, error } = await supabase

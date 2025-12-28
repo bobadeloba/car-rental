@@ -11,10 +11,11 @@ export const metadata = {
 export default async function AddReviewPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const supabase = getSupabaseServer()
-  const carId = searchParams.carId as string | undefined
+  const params = await searchParams
+  const supabase = await getSupabaseServer()
+  const carId = params.carId as string | undefined
 
   // Get current user
   const {

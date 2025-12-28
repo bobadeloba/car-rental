@@ -27,7 +27,7 @@ export default async function RelatedCars({ currentCarId, category, cars: propCa
   let relatedCars = propCars
 
   if (!relatedCars) {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
     const query = supabase.from("cars").select("*").neq("id", currentCarId).limit(6)
 
     // First attempt: Get cars with the same category

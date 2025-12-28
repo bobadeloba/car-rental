@@ -9,7 +9,7 @@ import { StatsSection } from "@/components/home/stats-section"
 import { FeaturedCars } from "@/components/home/featured-cars"
 import { Testimonials } from "@/components/home/testimonials"
 import CategoryShowcase from "@/components/home/category-showcase"
-import { getSupabaseServer } from "@/lib/supabase/server"
+import { createServerClient } from "@/lib/supabase/server"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { LuxuryDivider } from "@/components/home/luxury-divider"
 import { PageTracker } from "@/components/analytics/page-tracker"
@@ -50,8 +50,8 @@ export default async function HomePage() {
   // Use a guaranteed existing image path as default
   let heroImageUrl = "/images/banners/luxury-banner-1.png"
   let heroAltText = "Luxury car rental"
-  let categories = []
-  let featuredCars = []
+  let categories: any[] = []
+  let featuredCars: any[] = []
 
   try {
     // Wrap each fetch operation in its own try-catch to prevent cascading failures
@@ -84,12 +84,11 @@ export default async function HomePage() {
     }
 
     try {
-      // Fetch categories for the showcase
-      const supabase = getSupabaseServer()
+      const supabase = await createServerClient()
       const { data: categoriesData } = await supabase.from("categories").select("*").order("name")
 
       if (categoriesData) {
-        categories = categoriesData.map((category) => ({
+        categories = categoriesData.map((category: any) => ({
           ...category,
           slug: category.slug || category.name.toLowerCase().replace(/\s+/g, "-"),
         }))
@@ -100,8 +99,7 @@ export default async function HomePage() {
     }
 
     try {
-      // Fetch featured cars
-      const supabase = getSupabaseServer()
+      const supabase = await createServerClient()
       const { data: carsData } = await supabase
         .from("cars")
         .select("id, name, brand, price_per_day, images")

@@ -10,9 +10,10 @@ import { ArrowLeft, Edit } from "lucide-react"
 import UserBookings from "@/components/admin/users/user-bookings"
 import UserDocuments from "@/components/admin/users/user-documents"
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
-  const { data: user } = await supabase.from("users").select("*").eq("id", params.id).single()
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await getSupabaseServer()
+  const { data: user } = await supabase.from("users").select("*").eq("id", id).single()
 
   if (!user) {
     return {
@@ -27,11 +28,12 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   }
 }
 
-export default async function UserDetailPage({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
+export default async function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await getSupabaseServer()
 
   // Fetch user details
-  const { data: user } = await supabase.from("users").select("*").eq("id", params.id).single()
+  const { data: user } = await supabase.from("users").select("*").eq("id", id).single()
 
   if (!user) {
     notFound()

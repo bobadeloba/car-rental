@@ -7,7 +7,7 @@ import { ChevronLeft } from "lucide-react"
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const { slug } = params
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   try {
     // Handle UUID format slugs (which would never be valid category names)
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function CategoryPage({ params }: { params: { slug: string } }) {
   const { slug } = params
-  const supabase = getSupabaseServer()
+  const supabase = await getSupabaseServer()
 
   // Handle UUID format slugs (which would never be valid category names)
   if (slug.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {

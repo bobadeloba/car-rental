@@ -2,19 +2,18 @@
 
 import React from "react"
 
-import { createClientComponentClient } from "@/lib/supabase/client"
-import type { Database } from "@/types/supabase"
+import { createBrowserClient } from "@/lib/supabase/client"
 
 /**
  * Fetches app metadata from Supabase - CLIENT COMPONENTS ONLY
  */
 export async function fetchClientAppMetadata() {
   try {
-    const supabase = createClientComponentClient<Database>()
+    const supabase = createBrowserClient()
 
     const { data, error } = await supabase
       .from("admin_settings")
-      .select("app_name, site_name, meta_description, logo_url")
+      .select("app_name, site_name, site_description, logo_url")
       .order("updated_at", { ascending: false })
       .limit(1)
       .single()
@@ -32,7 +31,7 @@ export async function fetchClientAppMetadata() {
     return {
       appName: data?.app_name || "Kings Rental Cars",
       siteName: data?.site_name || data?.app_name || "Kings Rental Cars",
-      description: data?.meta_description || "Premium car rental service for all your needs",
+      description: data?.site_description || "Premium car rental service for all your needs",
       logoUrl: data?.logo_url,
     }
   } catch (error) {

@@ -7,7 +7,14 @@ interface PageTrackerProps {
   shouldTrack?: boolean
 }
 
-export function PageTracker({ pageTitle, shouldTrack = true }: PageTrackerProps) {
-  usePageTracker(pageTitle, shouldTrack)
-  return null // This component doesn't render anything
+export function PageTracker({ shouldTrack = true }: PageTrackerProps) {
+  // Always call the hook at the top level
+  usePageTracker()
+
+  // Only track if shouldTrack is true
+  if (!shouldTrack) {
+    return null
+  }
+
+  return null
 }

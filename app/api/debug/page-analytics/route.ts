@@ -3,7 +3,7 @@ import { getSupabaseServer } from "@/lib/supabase/server"
 
 export async function GET() {
   try {
-    const supabase = getSupabaseServer()
+    const supabase = await getSupabaseServer()
 
     // Check authentication
     const {

@@ -6,37 +6,29 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { pagePath, pageTitle, sessionId, duration, exitType, pageViewId } = body
 
-    if (!pagePath || !duration) {
-      return NextResponse.json({ error: "Page path and duration are required" }, { status: 400 })
+    if (!duration && duration !== 0) {
+      return NextResponse.json({ error: "Duration is required" }, { status: 400 })
     }
 
-    const supabase = createServerClient()
+    const supabase = await createServerClient()
 
-    // Get user if authenticated
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    // Determine if this is a bounce (less than 10 seconds and single page view)
     const isBounce = duration < 10
 
     if (pageViewId) {
-      // Update existing page view record with duration
       const { error } = await supabase
         .from("page_views")
         .update({
           duration_seconds: duration,
           is_bounce: isBounce,
-          exit_type: exitType,
+          exit_type: exitType || "navigation",
         })
         .eq("id", pageViewId)
 
       if (error) {
-        console.error("Error updating page view duration:", error)
-        return NextResponse.json({ error: "Failed to update page view duration" }, { status: 500 })
+        console.error("[v0] Error updating page view duration:", error)
+        return NextResponse.json({ error: "Failed to update duration" }, { status: 500 })
       }
-    } else {
-      // Create new record or find existing one by session and page
+    } else if (sessionId && pagePath) {
       const { data: existingView } = await supabase
         .from("page_views")
         .select("id")
@@ -47,40 +39,24 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (existingView) {
-        // Update existing record
         const { error } = await supabase
           .from("page_views")
           .update({
             duration_seconds: duration,
             is_bounce: isBounce,
-            exit_type: exitType,
+            exit_type: exitType || "navigation",
           })
           .eq("id", existingView.id)
 
         if (error) {
-          console.error("Error updating existing page view:", error)
-        }
-      } else {
-        // Create new record with duration
-        const { error } = await supabase.from("page_views").insert({
-          page_path: pagePath,
-          page_title: pageTitle,
-          session_id: sessionId,
-          duration_seconds: duration,
-          is_bounce: isBounce,
-          exit_type: exitType,
-          user_id: user?.id || null,
-        })
-
-        if (error) {
-          console.error("Error creating page view with duration:", error)
+          console.error("[v0] Error updating existing page view:", error)
         }
       }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error in track-page-duration API:", error)
+    console.error("[v0] Error in track-page-duration API:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

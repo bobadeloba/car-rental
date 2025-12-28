@@ -5,7 +5,7 @@ import CarViewsChart from "@/components/admin/analytics/car-views-chart"
 import CarViewsTable from "@/components/admin/analytics/car-views-table"
 import { CarViewsStats } from "@/components/admin/analytics/car-views-stats"
 import { generatePageMetadata } from "@/lib/metadata"
-import { createServerClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { Eye, TrendingUp, Car, Calendar } from "lucide-react"
 
 export async function generateMetadata() {
@@ -14,7 +14,7 @@ export async function generateMetadata() {
 
 async function getCarViewsData() {
   try {
-    const supabase = createServerClient({ admin: true })
+    const supabase = createAdminClient()
 
     const { data: allViews, error: viewsError } = await supabase
       .from("car_views")

@@ -1,5 +1,4 @@
-import { createSafeClient } from "@/lib/safe-supabase"
-import { createServerClient } from "@/lib/supabase/server" // Import for admin client
+import { createServerClient } from "@/lib/supabase/server"
 import CarsList from "@/components/cars/cars-list"
 import CarFilters from "@/components/cars/car-filters"
 import Image from "next/image"
@@ -17,17 +16,18 @@ export async function generateMetadata() {
 export default async function CarsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const supabase = createSafeClient() // For general data fetching
-  const supabaseAdmin = createServerClient({ admin: true }) // For admin-specific data
+  const params = await searchParams
+  const supabase = await createServerClient()
 
   // Fetch WhatsApp phone number from admin settings
   let whatsappPhoneNumber: string | null = null
   try {
-    const { data: adminSettingsData, error: adminSettingsError } = await supabaseAdmin
+    const { data: adminSettingsData, error: adminSettingsError } = await supabase
       .from("admin_settings")
       .select("whatsapp_phone")
+      .limit(1)
       .single()
 
     if (adminSettingsError) {
@@ -40,11 +40,11 @@ export default async function CarsPage({
   }
 
   // Extract filter parameters
-  const categoryId = searchParams.category as string | undefined
-  const brand = searchParams.brand as string | undefined
-  const minPriceParam = searchParams.minPrice ? Number(searchParams.minPrice as string) : undefined
-  const maxPriceParam = searchParams.maxPrice ? Number(searchParams.maxPrice as string) : undefined
-  const sortBy = searchParams.sortBy as string | undefined
+  const categoryId = params.category as string | undefined
+  const brand = params.brand as string | undefined
+  const minPriceParam = params.minPrice ? Number(params.minPrice as string) : undefined
+  const maxPriceParam = params.maxPrice ? Number(params.maxPrice as string) : undefined
+  const sortBy = params.sortBy as string | undefined
 
   // Get price range from database
   const { data: priceData } = await supabase
@@ -68,7 +68,7 @@ export default async function CarsPage({
   const uniqueBrands = brandsData ? [...new Set(brandsData.map((car) => car.brand))].filter(Boolean) : []
 
   // Declare the cars variable
-  let cars = []
+  let cars: any[] = []
 
   // FIXED APPROACH: Query cars based on category
   if (categoryId) {
@@ -160,7 +160,7 @@ export default async function CarsPage({
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="w-full lg:w-1/4">
             <CarFilters
-              brands={uniqueBrands}
+              brands={uniqueBrands as string[]}
               categories={categories || []}
               selectedCategory={categoryId}
               selectedBrand={brand}

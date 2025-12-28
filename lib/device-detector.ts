@@ -1,20 +1,20 @@
 // Device detection utility
 export interface DeviceInfo {
-  deviceType: "mobile" | "tablet" | "desktop"
+  device_type: "mobile" | "tablet" | "desktop"
   browser: string
-  operatingSystem: string
+  operating_system: string
 }
 
 export function detectDevice(userAgent: string): DeviceInfo {
   const ua = userAgent.toLowerCase()
 
   // Device type detection
-  let deviceType: "mobile" | "tablet" | "desktop" = "desktop"
+  let device_type: "mobile" | "tablet" | "desktop" = "desktop"
 
   if (/tablet|ipad|playbook|silk/i.test(userAgent)) {
-    deviceType = "tablet"
+    device_type = "tablet"
   } else if (/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile/i.test(userAgent)) {
-    deviceType = "mobile"
+    device_type = "mobile"
   }
 
   // Browser detection
@@ -34,22 +34,22 @@ export function detectDevice(userAgent: string): DeviceInfo {
   }
 
   // Operating system detection
-  let operatingSystem = "Unknown"
+  let operating_system = "Unknown"
   if (ua.includes("windows")) {
-    operatingSystem = "Windows"
+    operating_system = "Windows"
   } else if (ua.includes("mac")) {
-    operatingSystem = "macOS"
-  } else if (ua.includes("linux")) {
-    operatingSystem = "Linux"
+    operating_system = "macOS"
+  } else if (ua.includes("linux") && !ua.includes("android")) {
+    operating_system = "Linux"
   } else if (ua.includes("android")) {
-    operatingSystem = "Android"
-  } else if (ua.includes("ios") || ua.includes("iphone") || ua.includes("ipad")) {
-    operatingSystem = "iOS"
+    operating_system = "Android"
+  } else if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod")) {
+    operating_system = "iOS"
   }
 
   return {
-    deviceType,
+    device_type,
     browser,
-    operatingSystem,
+    operating_system,
   }
 }

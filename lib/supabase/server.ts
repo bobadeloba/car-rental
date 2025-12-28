@@ -1,14 +1,15 @@
 import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
+import { createClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import type { Database } from "@/types/supabase"
-import { getSupabaseUrl, getSupabaseAnonKey } from "@/lib/env-check"
 
-// Server-side Supabase client with enhanced error handling
 export async function createServerClient() {
-  try {
-    const cookieStore = await cookies()
+  const cookieStore = await cookies()
 
-    return createSupabaseServerClient<Database>(getSupabaseUrl(), getSupabaseAnonKey(), {
+  return createSupabaseServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -22,45 +23,21 @@ export async function createServerClient() {
           }
         },
       },
-    })
-  } catch (error) {
-    console.error("Error creating Supabase server client:", error)
-    return createDummyClient()
-  }
-}
-
-// Create a dummy client for fallback purposes
-function createDummyClient() {
-  if (process.env.NODE_ENV === "development") {
-    console.warn("Returning dummy Supabase client for static generation")
-  }
-  return {
-    auth: {
-      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
     },
-    from: () => ({
-      select: () => ({
-        eq: () => ({
-          single: () => Promise.resolve({ data: null, error: null }),
-          order: () => Promise.resolve({ data: [], error: null }),
-        }),
-        order: () => Promise.resolve({ data: [], error: null }),
-      }),
-      insert: () => Promise.resolve({ data: null, error: null }),
-      update: () => ({
-        eq: () => Promise.resolve({ data: null, error: null }),
-      }),
-      delete: () => ({
-        eq: () => Promise.resolve({ data: null, error: null }),
-      }),
-    }),
-  } as any
+  )
 }
 
-// Keep the original functions for backward compatibility
-export const getSupabaseServer = createServerClient
-export const getServerSupabaseClient = createServerClient
+export function createAdminClient() {
+  return createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  })
+}
 
+export const getSupabaseServer = createServerClient
+
+// Backward compatibility aliases
 export const createServerComponentClient = createServerClient
 export const createRouteHandlerClient = createServerClient

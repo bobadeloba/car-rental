@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
-import { createServerClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 
 export async function GET() {
   try {
     // Create admin Supabase client
-    const supabase = createServerClient({ admin: true })
+    const supabase = createAdminClient()
 
     // Get car view statistics
     const { data: carViewStats, error } = await supabase

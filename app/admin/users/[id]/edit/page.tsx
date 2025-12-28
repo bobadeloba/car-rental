@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft } from "lucide-react"
 import UserEditForm from "@/components/admin/users/user-edit-form"
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
-  const { data: user } = await supabase.from("users").select("*").eq("id", params.id).single()
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await getSupabaseServer()
+  const { data: user } = await supabase.from("users").select("*").eq("id", id).single()
 
   if (!user) {
     return {
@@ -23,11 +24,12 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   }
 }
 
-export default async function EditUserPage({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
+export default async function EditUserPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await getSupabaseServer()
 
   // Fetch user details
-  const { data: user } = await supabase.from("users").select("*").eq("id", params.id).single()
+  const { data: user } = await supabase.from("users").select("*").eq("id", id).single()
 
   if (!user) {
     notFound()

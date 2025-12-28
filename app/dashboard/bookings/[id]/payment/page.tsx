@@ -7,7 +7,7 @@ import { getCompanyName } from "@/lib/company-name"
 import type { Metadata, ResolvingMetadata } from "next"
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
@@ -19,8 +19,9 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   }
 }
 
-export default async function PaymentPage({ params }: { params: { id: string } }) {
-  const supabase = getSupabaseServer()
+export default async function PaymentPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await getSupabaseServer()
 
   // Get current user
   const {
@@ -28,7 +29,7 @@ export default async function PaymentPage({ params }: { params: { id: string } }
   } = await supabase.auth.getSession()
 
   if (!session) {
-    redirect("/auth/signin?redirect=/dashboard/bookings/" + params.id + "/payment")
+    redirect("/auth/signin?redirect=/dashboard/bookings/" + id + "/payment")
   }
 
   // Get booking details
@@ -44,7 +45,7 @@ export default async function PaymentPage({ params }: { params: { id: string } }
         images
       )
     `)
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("user_id", session.user.id)
     .single()
 
@@ -56,12 +57,12 @@ export default async function PaymentPage({ params }: { params: { id: string } }
   const { data: payment } = await supabase
     .from("payments")
     .select("*")
-    .eq("booking_id", params.id)
+    .eq("booking_id", id)
     .eq("payment_status", "completed")
     .maybeSingle()
 
   if (payment) {
-    redirect("/dashboard/bookings/" + params.id)
+    redirect("/dashboard/bookings/" + id)
   }
 
   return (

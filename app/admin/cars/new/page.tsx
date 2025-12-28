@@ -12,7 +12,7 @@ export async function generateMetadata() {
 }
 
 export default async function NewCarPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   try {
     // Check if user is authenticated
