@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Car ID is required" }, { status: 400 })
     }
 
+    const finalSessionId = sessionId || `server-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
+
     // Get client IP and user agent
     const forwarded = request.headers.get("x-forwarded-for")
     const realIp = request.headers.get("x-real-ip")
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
       car_id: carId,
       ip_address: ipAddress,
       user_agent: userAgent,
-      session_id: sessionId || null,
+      session_id: finalSessionId,
       user_id: user?.id || null,
       device_type: deviceInfo.device_type,
       browser: deviceInfo.browser,

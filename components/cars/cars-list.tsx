@@ -37,6 +37,16 @@ export default function CarsList({ cars, isLoading, whatsappPhoneNumber }: CarsL
   const [hoveredCar, setHoveredCar] = useState<string | null>(null)
   const [imageErrorStates, setImageErrorStates] = useState<Record<string, boolean>>({})
 
+  const getSessionId = () => {
+    if (typeof window === "undefined") return `fallback-${Date.now()}`
+    let sessionId = sessionStorage.getItem("tracking_session_id")
+    if (!sessionId) {
+      sessionId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
+      sessionStorage.setItem("tracking_session_id", sessionId)
+    }
+    return sessionId
+  }
+
   const handleViewDetails = async (car: Car) => {
     // Track the car view when user clicks "View Details"
     try {
@@ -45,7 +55,10 @@ export default function CarsList({ cars, isLoading, whatsappPhoneNumber }: CarsL
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ carId: car.id }),
+        body: JSON.stringify({
+          carId: car.id,
+          sessionId: getSessionId(),
+        }),
       })
       console.log(`Tracked view for car: ${car.brand} ${car.name}`)
     } catch (error) {
