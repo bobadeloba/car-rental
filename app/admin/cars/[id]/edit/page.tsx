@@ -8,9 +8,7 @@ import Link from "next/link"
 import { generatePageMetadata } from "@/lib/metadata"
 
 interface EditCarPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }> // Made params a Promise for Next.js 15+
 }
 
 export async function generateMetadata({ params }: EditCarPageProps) {
@@ -18,6 +16,7 @@ export async function generateMetadata({ params }: EditCarPageProps) {
 }
 
 export default async function EditCarPage({ params }: EditCarPageProps) {
+  const { id } = await params
   const supabase = await createServerClient()
 
   // Check if user is authenticated
@@ -26,7 +25,7 @@ export default async function EditCarPage({ params }: EditCarPageProps) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/auth/signin?callbackUrl=/admin/cars/" + params.id + "/edit")
+    redirect("/auth/signin?callbackUrl=/admin/cars/" + id + "/edit")
   }
 
   // Check if user is an admin
@@ -37,7 +36,7 @@ export default async function EditCarPage({ params }: EditCarPageProps) {
   }
 
   // Fetch car data
-  const { data: car, error } = await supabase.from("cars").select("*").eq("id", params.id).single()
+  const { data: car, error } = await supabase.from("cars").select("*").eq("id", id).single()
 
   if (error) {
     console.error("Error fetching car:", error)
@@ -56,7 +55,7 @@ export default async function EditCarPage({ params }: EditCarPageProps) {
       <Breadcrumbs
         items={[
           { label: "Cars Management", href: "/admin/cars" },
-          { label: `${car.brand} ${car.name}`, href: `/admin/cars/${params.id}` },
+          { label: `${car.brand} ${car.name}`, href: `/admin/cars/${id}` },
           { label: "Edit" },
         ]}
       />
@@ -64,7 +63,7 @@ export default async function EditCarPage({ params }: EditCarPageProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/admin/cars/${params.id}`}>
+            <Link href={`/admin/cars/${id}`}>
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back to Car Details
             </Link>

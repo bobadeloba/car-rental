@@ -11,9 +11,7 @@ import { formatCurrency } from "@/lib/utils"
 import { generatePageMetadata } from "@/lib/metadata"
 
 interface PageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }> // Made params a Promise for Next.js 15+
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -21,8 +19,10 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function CarDetailPage({ params }: PageProps) {
+  const { id } = await params
+
   // Redirect to the new car page if the ID is "new"
-  if (params.id === "new") {
+  if (id === "new") {
     redirect("/admin/cars/new")
   }
 
@@ -33,7 +33,7 @@ export default async function CarDetailPage({ params }: PageProps) {
     data: { session },
   } = await supabase.auth.getSession()
   if (!session) {
-    redirect("/auth/signin?callbackUrl=/admin/cars/" + params.id)
+    redirect("/auth/signin?callbackUrl=/admin/cars/" + id)
   }
 
   // Check if user is an admin
@@ -44,7 +44,7 @@ export default async function CarDetailPage({ params }: PageProps) {
   }
 
   // Fetch car details
-  const { data: car, error } = await supabase.from("cars").select("*").eq("id", params.id).single()
+  const { data: car, error } = await supabase.from("cars").select("*").eq("id", id).single()
 
   if (error || !car) {
     console.error("Error fetching car:", error)
@@ -61,7 +61,7 @@ export default async function CarDetailPage({ params }: PageProps) {
       status,
       users:user_id (full_name, email)
     `)
-    .eq("car_id", params.id)
+    .eq("car_id", id)
     .in("status", ["confirmed", "pending"])
     .order("start_date", { ascending: true })
 
@@ -98,7 +98,7 @@ export default async function CarDetailPage({ params }: PageProps) {
         </div>
         <div className="flex space-x-2">
           <Button variant="outline" asChild>
-            <Link href={`/admin/cars/${params.id}/edit`}>
+            <Link href={`/admin/cars/${id}/edit`}>
               <Edit className="h-4 w-4 mr-2" />
               Edit Car
             </Link>

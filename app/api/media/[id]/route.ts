@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { createServerClient } from "@/lib/supabase/server"
 
 // Helper function to extract filename from URL
 function getFilenameFromUrl(url: string): string | null {
@@ -14,26 +13,10 @@ function getFilenameFromUrl(url: string): string | null {
   }
 }
 
-async function createSupabaseClient() {
-  const cookieStore = await cookies()
-  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: {
-      getAll() {
-        return cookieStore.getAll()
-      },
-      setAll(cookiesToSet) {
-        try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-        } catch {}
-      },
-    },
-  })
-}
-
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createSupabaseClient()
-    const { id } = await params
+    const supabase = await createServerClient()
+    const { id } = params
 
     const { data, error } = await supabase.from("media").select("*").eq("id", id).single()
 
@@ -47,10 +30,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createSupabaseClient()
-    const { id } = await params
+    const supabase = await createServerClient()
+    const { id } = params
 
     // Get request body
     let body
@@ -83,10 +66,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createSupabaseClient()
-    const { id } = await params
+    const supabase = await createServerClient()
+    const { id } = params
 
     // First get the media item to get the file path
     const { data: media, error: fetchError } = await supabase.from("media").select("file_path").eq("id", id).single()
