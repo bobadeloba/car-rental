@@ -59,6 +59,13 @@ export default function ContactForm() {
 
       console.log("Submission saved:", data)
 
+      // Track Google Ads conversion for lead form submission
+      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        (window as any).gtag('event', 'conversion', {
+          'send_to': 'AW-17113926614/IoLxCM3PttUaENaXx-A_'
+        })
+      }
+
       toast({
         title: "Message sent!",
         description: "We'll get back to you as soon as possible.",

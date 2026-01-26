@@ -15,6 +15,14 @@ export default function BookingConfirmationPage() {
     // If no booking ID is provided, redirect to dashboard
     if (!bookingId) {
       router.push("/dashboard")
+      return
+    }
+
+    // Track Google Ads conversion for completed booking
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+      (window as any).gtag('event', 'conversion', {
+        'send_to': 'AW-17113926614/IoLxCM3PttUaENaXx-A_'
+      })
     }
   }, [bookingId, router])
 
